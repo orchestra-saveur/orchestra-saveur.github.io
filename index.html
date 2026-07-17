@@ -781,6 +781,26 @@
       }
 
       /* ===== Flyer lightbox ===== */
+      .flyers {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 40px;
+      }
+      .flyers .flyer {
+        width: 50%;
+        height: auto;
+      }
+      @media (max-width: 640px) {
+        .flyers {
+          flex-direction: column;
+          gap: 20px;
+          max-width: 420px;
+          margin-inline: auto;
+        }
+        .flyers .flyer {
+          width: 100%;
+        }
+      }
       .flyer {
         cursor: zoom-in;
       }
@@ -965,7 +985,7 @@
             </div>
             <div class="movement-marker__staff" aria-hidden="true"></div>
           </div>
-          <div style="display: flex; gap: 16px; margin-bottom: 40px">
+          <div class="flyers">
             <img
               class="flyer"
               src="第5回チラシ表.jpg"
@@ -976,7 +996,6 @@
               role="button"
               tabindex="0"
               aria-label="第5回定期演奏会 チラシ表を拡大表示"
-              style="width: 50%; height: auto"
             />
             <img
               class="flyer"
@@ -988,7 +1007,6 @@
               role="button"
               tabindex="0"
               aria-label="第5回定期演奏会 チラシ裏を拡大表示"
-              style="width: 50%; height: auto"
             />
           </div>
 
