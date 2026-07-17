@@ -769,6 +769,68 @@
           transform: none;
         }
       }
+
+      /* ===== Flyer lightbox ===== */
+      .flyer {
+        cursor: zoom-in;
+      }
+      .lightbox {
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        background: rgba(15, 5, 9, 0.95);
+        overflow: hidden;
+        touch-action: none;
+        overscroll-behavior: contain;
+        animation: lbFade 0.25s var(--ease);
+      }
+      .lightbox[hidden] {
+        display: none;
+      }
+      .lightbox__img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform-origin: 0 0;
+        will-change: transform;
+        user-select: none;
+        -webkit-user-select: none;
+        -webkit-user-drag: none;
+        touch-action: none;
+        max-width: none;
+      }
+      .lightbox__close {
+        position: fixed;
+        top: 12px;
+        right: 14px;
+        width: 44px;
+        height: 44px;
+        border: 1px solid rgba(248, 243, 232, 0.4);
+        background: rgba(39, 11, 20, 0.6);
+        color: var(--ivory-soft);
+        font-size: 1.6rem;
+        line-height: 1;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition:
+          background-color 0.3s var(--ease),
+          border-color 0.3s var(--ease);
+      }
+      .lightbox__close:hover {
+        background: var(--bordeaux);
+        border-color: var(--brass-light);
+      }
+      @keyframes lbFade {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
     </style>
   </head>
   <body>
@@ -895,19 +957,27 @@
           </div>
           <div style="display: flex; gap: 16px; margin-bottom: 40px">
             <img
+              class="flyer"
               src="第5回チラシ表.jpg"
               alt="第5回定期演奏会 チラシ表"
               width="1240"
               height="1754"
               loading="lazy"
+              role="button"
+              tabindex="0"
+              aria-label="第5回定期演奏会 チラシ表を拡大表示"
               style="width: 50%; height: auto"
             />
             <img
+              class="flyer"
               src="第5回チラシ裏.jpg"
               alt="第5回定期演奏会 チラシ裏"
               width="1240"
               height="1754"
               loading="lazy"
+              role="button"
+              tabindex="0"
+              aria-label="第5回定期演奏会 チラシ裏を拡大表示"
               style="width: 50%; height: auto"
             />
           </div>
@@ -1038,6 +1108,20 @@
       <div>© 2026 Orchestre de SAVEUR</div>
     </footer>
 
+    <div
+      class="lightbox"
+      id="lightbox"
+      role="dialog"
+      aria-modal="true"
+      aria-label="チラシ拡大表示"
+      hidden
+    >
+      <img class="lightbox__img" id="lightboxImg" alt="" draggable="false" />
+      <button class="lightbox__close" id="lightboxClose" aria-label="閉じる">
+        ×
+      </button>
+    </div>
+
     <script>
       const hero = document.getElementById("hero");
       const nav = document.getElementById("siteNav");
@@ -1064,6 +1148,238 @@
         { threshold: 0.15 },
       );
       reveals.forEach((el) => revealObserver.observe(el));
+
+      /* ===== Flyer lightbox (pinch-zoom / pan) ===== */
+      (function () {
+        const lb = document.getElementById("lightbox");
+        const img = document.getElementById("lightboxImg");
+        const closeBtn = document.getElementById("lightboxClose");
+        if (!lb || !img) return;
+
+        const MIN = 1,
+          MAX = 6;
+        let scale = 1,
+          tx = 0,
+          ty = 0;
+        let baseW = 0,
+          baseH = 0;
+        let lastActive = null;
+
+        const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+        const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+        const mid = (a, b) => ({ x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 });
+        const apply = () =>
+          (img.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`);
+
+        function fitAndCenter() {
+          const vw = window.innerWidth,
+            vh = window.innerHeight;
+          const nw = img.naturalWidth || 1,
+            nh = img.naturalHeight || 1;
+          const pad = 0.94;
+          let w = vw * pad,
+            h = (w * nh) / nw;
+          if (h > vh * pad) {
+            h = vh * pad;
+            w = (h * nw) / nh;
+          }
+          baseW = w;
+          baseH = h;
+          img.style.width = w + "px";
+          img.style.height = "auto";
+          scale = 1;
+          tx = (vw - w) / 2;
+          ty = (vh - h) / 2;
+          apply();
+        }
+
+        function open(src, alt) {
+          lastActive = document.activeElement;
+          img.src = src;
+          img.alt = alt || "";
+          lb.hidden = false;
+          document.body.style.overflow = "hidden";
+          if (img.complete && img.naturalWidth) fitAndCenter();
+          else img.onload = fitAndCenter;
+          closeBtn.focus();
+        }
+
+        function close() {
+          lb.hidden = true;
+          document.body.style.overflow = "";
+          img.src = "";
+          if (lastActive && lastActive.focus) lastActive.focus();
+        }
+
+        document.querySelectorAll(".flyer").forEach((el) => {
+          el.addEventListener("click", () => open(el.src, el.alt));
+          el.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              open(el.src, el.alt);
+            }
+          });
+        });
+        closeBtn.addEventListener("click", close);
+        document.addEventListener("keydown", (e) => {
+          if (!lb.hidden && e.key === "Escape") close();
+        });
+        window.addEventListener("resize", () => {
+          if (!lb.hidden) fitAndCenter();
+        });
+
+        // zoom around a screen point, keeping that point fixed
+        function zoomAt(px, py, factor) {
+          const ns = clamp(scale * factor, MIN, MAX);
+          const fe = ns / scale;
+          tx = px - fe * (px - tx);
+          ty = py - fe * (py - ty);
+          scale = ns;
+          if (scale <= MIN + 0.001) fitAndCenter();
+          else apply();
+        }
+
+        // ---- Touch gestures ----
+        const pts = new Map();
+        let start = null;
+        let lastTap = 0;
+
+        lb.addEventListener(
+          "touchstart",
+          (e) => {
+            if (e.target === closeBtn) return;
+            for (const t of e.changedTouches)
+              pts.set(t.identifier, { x: t.clientX, y: t.clientY });
+            if (pts.size === 1) {
+              const p = [...pts.values()][0];
+              start = {
+                mode: "pan",
+                x: p.x,
+                y: p.y,
+                tx,
+                ty,
+                moved: false,
+                target: e.target,
+              };
+              const now = e.timeStamp;
+              if (now - lastTap < 300) {
+                zoomAt(p.x, p.y, scale > 1.5 ? MIN / scale : 2.5);
+                start.moved = true;
+              }
+              lastTap = now;
+            } else if (pts.size === 2) {
+              const [a, b] = [...pts.values()];
+              const m = mid(a, b);
+              start = {
+                mode: "pinch",
+                dist: dist(a, b),
+                mx: m.x,
+                my: m.y,
+                scale,
+                tx,
+                ty,
+              };
+            }
+          },
+          { passive: false },
+        );
+
+        lb.addEventListener(
+          "touchmove",
+          (e) => {
+            if (!start) return;
+            e.preventDefault();
+            for (const t of e.changedTouches)
+              if (pts.has(t.identifier))
+                pts.set(t.identifier, { x: t.clientX, y: t.clientY });
+            if (start.mode === "pan" && pts.size === 1) {
+              const p = [...pts.values()][0];
+              if (scale > 1) {
+                tx = start.tx + (p.x - start.x);
+                ty = start.ty + (p.y - start.y);
+                apply();
+              }
+              if (Math.abs(p.x - start.x) > 8 || Math.abs(p.y - start.y) > 8)
+                start.moved = true;
+            } else if (start.mode === "pinch" && pts.size >= 2) {
+              const [a, b] = [...pts.values()];
+              const m = mid(a, b);
+              const ns = clamp((start.scale * dist(a, b)) / start.dist, MIN, MAX);
+              const fe = ns / start.scale;
+              tx = m.x - fe * (start.mx - start.tx) + (m.x - start.mx);
+              ty = m.y - fe * (start.my - start.ty) + (m.y - start.my);
+              scale = ns;
+              apply();
+            }
+          },
+          { passive: false },
+        );
+
+        function endTouch(e) {
+          const wasTap = start && start.mode === "pan" && !start.moved;
+          const onBackdrop = start && start.target === lb;
+          for (const t of e.changedTouches) pts.delete(t.identifier);
+          if (pts.size === 0) {
+            if (wasTap && onBackdrop && scale <= MIN + 0.001) close();
+            else if (scale <= MIN + 0.001) fitAndCenter();
+            start = null;
+          } else if (pts.size === 1) {
+            const p = [...pts.values()][0];
+            start = { mode: "pan", x: p.x, y: p.y, tx, ty, moved: true };
+          }
+        }
+        lb.addEventListener("touchend", endTouch);
+        lb.addEventListener("touchcancel", endTouch);
+
+        // ---- Desktop: wheel zoom, drag pan, dblclick ----
+        lb.addEventListener(
+          "wheel",
+          (e) => {
+            if (lb.hidden) return;
+            e.preventDefault();
+            zoomAt(e.clientX, e.clientY, e.deltaY < 0 ? 1.15 : 1 / 1.15);
+          },
+          { passive: false },
+        );
+        lb.addEventListener("dblclick", (e) => {
+          if (e.target === closeBtn) return;
+          zoomAt(e.clientX, e.clientY, scale > 1.5 ? MIN / scale : 2.5);
+        });
+        let mouseStart = null;
+        lb.addEventListener("mousedown", (e) => {
+          if (e.target === closeBtn) return;
+          mouseStart = {
+            x: e.clientX,
+            y: e.clientY,
+            tx,
+            ty,
+            moved: false,
+            target: e.target,
+          };
+        });
+        window.addEventListener("mousemove", (e) => {
+          if (!mouseStart || lb.hidden) return;
+          if (scale > 1) {
+            tx = mouseStart.tx + (e.clientX - mouseStart.x);
+            ty = mouseStart.ty + (e.clientY - mouseStart.y);
+            apply();
+          }
+          if (
+            Math.abs(e.clientX - mouseStart.x) > 4 ||
+            Math.abs(e.clientY - mouseStart.y) > 4
+          )
+            mouseStart.moved = true;
+        });
+        window.addEventListener("mouseup", (e) => {
+          if (!mouseStart) return;
+          const clickedBackdrop =
+            !mouseStart.moved &&
+            scale <= MIN + 0.001 &&
+            mouseStart.target === lb;
+          mouseStart = null;
+          if (clickedBackdrop) close();
+        });
+      })();
     </script>
   </body>
 </html>
