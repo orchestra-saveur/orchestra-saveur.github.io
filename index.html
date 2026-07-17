@@ -19,10 +19,77 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "Orchestre de SAVEUR",
-  "alternateName": "オーケストラ・サブール",
-  "url": "https://orchestra-saveur.github.io/"
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://orchestra-saveur.github.io/#website",
+      "name": "Orchestre de SAVEUR",
+      "alternateName": "オーケストラ・サブール",
+      "url": "https://orchestra-saveur.github.io/",
+      "publisher": { "@id": "https://orchestra-saveur.github.io/#orchestra" }
+    },
+    {
+      "@type": "MusicGroup",
+      "@id": "https://orchestra-saveur.github.io/#orchestra",
+      "name": "Orchestre de SAVEUR",
+      "alternateName": "オーケストラ・サブール",
+      "url": "https://orchestra-saveur.github.io/",
+      "foundingDate": "2022",
+      "email": "saveur.orchestra@gmail.com",
+      "logo": "https://orchestra-saveur.github.io/logo.png"
+    },
+    {
+      "@type": "MusicEvent",
+      "@id": "https://orchestra-saveur.github.io/#concert-5",
+      "name": "第5回定期演奏会",
+      "description": "Orchestre de SAVEUR 第5回定期演奏会。指揮：山上紘生、ピアノ独奏：青島周平。ブラームス：交響曲第1番、ピアノ協奏曲第2番を神奈川県立音楽堂にて演奏します。",
+      "startDate": "2026-08-29T13:30+09:00",
+      "endDate": "2026-08-29T16:00+09:00",
+      "doorTime": "2026-08-29T13:00+09:00",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "image": "https://orchestra-saveur.github.io/og-image.jpg",
+      "location": {
+        "@type": "Place",
+        "name": "神奈川県立音楽堂",
+        "address": {
+          "@type": "PostalAddress",
+          "postalCode": "220-0044",
+          "addressRegion": "神奈川県",
+          "addressLocality": "横浜市西区",
+          "streetAddress": "紅葉ヶ丘9-2",
+          "addressCountry": "JP"
+        }
+      },
+      "performer": [
+        { "@id": "https://orchestra-saveur.github.io/#orchestra" },
+        { "@type": "Person", "name": "山上紘生", "jobTitle": "指揮" },
+        { "@type": "Person", "name": "青島周平", "jobTitle": "ピアノ独奏" }
+      ],
+      "organizer": { "@id": "https://orchestra-saveur.github.io/#orchestra" },
+      "workPerformed": [
+        {
+          "@type": "MusicComposition",
+          "name": "交響曲第1番",
+          "composer": { "@type": "Person", "name": "ヨハネス・ブラームス" }
+        },
+        {
+          "@type": "MusicComposition",
+          "name": "ピアノ協奏曲第2番",
+          "composer": { "@type": "Person", "name": "ヨハネス・ブラームス" }
+        }
+      ],
+      "offers": {
+        "@type": "Offer",
+        "name": "全席指定",
+        "price": "1000",
+        "priceCurrency": "JPY",
+        "availability": "https://schema.org/InStock",
+        "validFrom": "2026-07-05T12:00+09:00",
+        "url": "https://teket.jp/4919/70480"
+      }
+    }
+  ]
 }
 </script>
 
