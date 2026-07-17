@@ -567,12 +567,14 @@
         padding-right: 20px;
       }
       .concert-date__day {
+        display: block;
         font-family: "Shippori Mincho", serif;
         font-size: 2.1rem;
         color: var(--bordeaux);
         line-height: 1;
       }
       .concert-date__month {
+        display: block;
         font-family: "Cormorant Garamond", serif;
         font-style: italic;
         color: var(--brass);
@@ -958,7 +960,9 @@
               </div>
               <div class="stat-row">
                 <span class="stat-row__label">次回演奏会</span>
-                <span class="stat-row__value">2026年8月29日</span>
+                <span class="stat-row__value"
+                  ><time datetime="2026-08-29">2026年8月29日</time></span
+                >
               </div>
               <div class="stat-row">
                 <span class="stat-row__label">会場</span>
@@ -1012,10 +1016,10 @@
 
           <div class="concert-list">
             <article class="concert-card">
-              <div class="concert-date">
-                <div class="concert-date__day">8.29</div>
-                <div class="concert-date__month">29 Aug 2026</div>
-              </div>
+              <time class="concert-date" datetime="2026-08-29T13:30+09:00">
+                <span class="concert-date__day">8.29</span>
+                <span class="concert-date__month">29 Aug 2026</span>
+              </time>
               <div class="concert-body">
                 <h3>第5回定期演奏会</h3>
                 <p class="programme">
