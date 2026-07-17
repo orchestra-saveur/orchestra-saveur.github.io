@@ -1196,6 +1196,8 @@
         let baseW = 0,
           baseH = 0;
         let lastActive = null;
+        let closedAt = 0;
+        let closeTimer = null;
 
         const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
         const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
@@ -1226,6 +1228,9 @@
         }
 
         function open(src, alt) {
+          // Ignore the compatibility "ghost click" a touch device fires on the
+          // flyer beneath the backdrop right after a tap-to-close.
+          if (Date.now() - closedAt < 400) return;
           lastActive = document.activeElement;
           img.src = src;
           img.alt = alt || "";
@@ -1237,10 +1242,28 @@
         }
 
         function close() {
+          cancelClose();
           lb.hidden = true;
+          closedAt = Date.now();
           document.body.style.overflow = "";
           img.src = "";
           if (lastActive && lastActive.focus) lastActive.focus();
+        }
+
+        // Close on a lone tap/click, but wait long enough that the second
+        // tap/click of a zoom gesture can cancel it (see dblclick / double-tap).
+        function scheduleClose() {
+          if (closeTimer) return;
+          closeTimer = setTimeout(() => {
+            closeTimer = null;
+            close();
+          }, 280);
+        }
+        function cancelClose() {
+          if (closeTimer) {
+            clearTimeout(closeTimer);
+            closeTimer = null;
+          }
         }
 
         document.querySelectorAll(".flyer").forEach((el) => {
@@ -1295,6 +1318,7 @@
               };
               const now = e.timeStamp;
               if (now - lastTap < 300) {
+                cancelClose(); // second tap: zoom instead of closing
                 zoomAt(p.x, p.y, scale > 1.5 ? MIN / scale : 2.5);
                 start.moved = true;
               }
@@ -1349,10 +1373,12 @@
 
         function endTouch(e) {
           const wasTap = start && start.mode === "pan" && !start.moved;
-          const onBackdrop = start && start.target === lb;
           for (const t of e.changedTouches) pts.delete(t.identifier);
           if (pts.size === 0) {
-            if (wasTap && onBackdrop && scale <= MIN + 0.001) close();
+            // A lone tap anywhere (backdrop or image) while unzoomed closes;
+            // deferred so a double-tap-to-zoom can cancel it.
+            if (wasTap && scale <= MIN + 0.001 && start.target !== closeBtn)
+              scheduleClose();
             else if (scale <= MIN + 0.001) fitAndCenter();
             start = null;
           } else if (pts.size === 1) {
@@ -1375,6 +1401,7 @@
         );
         lb.addEventListener("dblclick", (e) => {
           if (e.target === closeBtn) return;
+          cancelClose(); // double click: zoom instead of closing
           zoomAt(e.clientX, e.clientY, scale > 1.5 ? MIN / scale : 2.5);
         });
         let mouseStart = null;
@@ -1404,12 +1431,16 @@
         });
         window.addEventListener("mouseup", (e) => {
           if (!mouseStart) return;
-          const clickedBackdrop =
-            !mouseStart.moved &&
+          // A click anywhere (backdrop or image) while unzoomed closes. Judge
+          // by net travel so a stray drag-start jitter over the image doesn't
+          // count as a drag.
+          const clickedToClose =
+            Math.abs(e.clientX - mouseStart.x) < 6 &&
+            Math.abs(e.clientY - mouseStart.y) < 6 &&
             scale <= MIN + 0.001 &&
-            mouseStart.target === lb;
+            mouseStart.target !== closeBtn;
           mouseStart = null;
-          if (clickedBackdrop) close();
+          if (clickedToClose) scheduleClose();
         });
       })();
     </script>
