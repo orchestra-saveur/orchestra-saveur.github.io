@@ -53,7 +53,11 @@
             "url": "https://orchestra-saveur.github.io/",
             "foundingDate": "2022",
             "email": "saveur.orchestra@gmail.com",
-            "logo": "https://orchestra-saveur.github.io/logo.png"
+            "logo": "https://orchestra-saveur.github.io/logo.png",
+            "sameAs": [
+              "https://x.com/OrchestreSaveur",
+              "https://www.youtube.com/@orchestrasaveur4345"
+            ]
           },
           {
             "@type": "MusicEvent",
@@ -716,6 +720,33 @@
         margin-bottom: 18px;
         display: block;
       }
+      .footer-social {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 22px;
+      }
+      .footer-social a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        transition: opacity 0.3s var(--ease);
+      }
+      .footer-social a:hover {
+        opacity: 0.6;
+      }
+      .footer-social img {
+        height: 22px;
+        width: auto;
+        margin: 0;
+      }
+      /* PNG has transparent padding, so scale up to match X's visible size */
+      .footer-social .icon-youtube {
+        height: 33px;
+      }
 
       /* ===== Responsive ===== */
       /* PC: enlarge nav logo and links 1.5x */
@@ -1073,13 +1104,6 @@
               <p>
                 過去の演奏会の様子をYouTubeで公開しています。本番の雰囲気をぜひご覧ください。
               </p>
-              <a
-                href="https://youtu.be/O8BMjsB4GWE"
-                class="btn btn--ghost"
-                target="_blank"
-                rel="noopener"
-                >YouTubeで見る</a
-              >
             </div>
           </div>
         </div>
@@ -1137,6 +1161,30 @@
         loading="lazy"
       />
       <span class="foot-eyebrow">Orchestre de SAVEUR</span>
+      <div class="footer-social">
+        <a
+          href="https://x.com/OrchestreSaveur"
+          target="_blank"
+          rel="noopener"
+          aria-label="X(旧Twitter)"
+        >
+          <img src="icon-x.svg" width="1200" height="1227" alt="" />
+        </a>
+        <a
+          href="https://www.youtube.com/@orchestrasaveur4345"
+          target="_blank"
+          rel="noopener"
+          aria-label="YouTube"
+        >
+          <img
+            class="icon-youtube"
+            src="icon-youtube.png"
+            width="1255"
+            height="1075"
+            alt=""
+          />
+        </a>
+      </div>
       <div>© 2026 Orchestre de SAVEUR</div>
     </footer>
 
