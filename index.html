@@ -57,7 +57,8 @@
             "logo": "https://orchestra-saveur.github.io/logo.png",
             "sameAs": [
               "https://x.com/OrchestreSaveur",
-              "https://www.youtube.com/@orchestrasaveur4345"
+              "https://www.youtube.com/@orchestrasaveur4345",
+              "https://teket.jp/g/8xxevzf9ca"
             ]
           },
           {
@@ -81,6 +82,11 @@
                 "addressLocality": "横浜市西区",
                 "streetAddress": "紅葉ヶ丘9-2",
                 "addressCountry": "JP"
+              },
+              "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": 35.452728,
+                "longitude": 139.626372
               }
             },
             "performer": [
@@ -121,6 +127,18 @@
               "availability": "https://schema.org/InStock",
               "validFrom": "2026-07-05T12:00+09:00",
               "url": "https://teket.jp/4919/70480"
+            }
+          },
+          {
+            "@type": "VideoObject",
+            "name": "Orchestre de SAVEUR 第3回演奏会",
+            "description": "Orchestre de SAVEUR(オーケストラ・サブール)第3回演奏会の記録映像。",
+            "thumbnailUrl": "https://i.ytimg.com/vi/O8BMjsB4GWE/hqdefault.jpg",
+            "uploadDate": "2024-12-25T00:00:00+09:00",
+            "contentUrl": "https://youtu.be/O8BMjsB4GWE",
+            "embedUrl": "https://www.youtube.com/embed/O8BMjsB4GWE",
+            "publisher": {
+              "@id": "https://orchestra-saveur.github.io/#orchestra"
             }
           }
         ]
@@ -614,6 +632,24 @@
         margin-top: 6px;
         font-weight: 500;
       }
+      .concert-body .access {
+        font-family: "Noto Sans JP", sans-serif;
+        font-size: 0.82rem;
+        color: var(--ink-soft);
+        margin-top: 6px;
+        line-height: 1.7;
+      }
+      .concert-body .access .map-link {
+        text-decoration: none;
+        color: var(--bordeaux);
+        border-bottom: 1px solid var(--brass);
+        padding-bottom: 1px;
+        white-space: nowrap;
+        transition: color 0.3s var(--ease);
+      }
+      .concert-body .access .map-link:hover {
+        color: var(--brass);
+      }
       .concert-link {
         font-family: "Noto Sans JP", sans-serif;
         font-size: 0.88rem;
@@ -1059,6 +1095,16 @@
                 </p>
                 <p class="credit">ピアノ独奏：青島周平　｜　指揮：山上紘生</p>
                 <p class="venue">神奈川県立音楽堂 ｜ 開場13:00 開演13:30</p>
+                <p class="access">
+                  JR・市営地下鉄「桜木町駅」より徒歩約10分<br />
+                  <a
+                    class="map-link"
+                    href="https://www.google.com/maps/search/?api=1&query=%E7%A5%9E%E5%A5%88%E5%B7%9D%E7%9C%8C%E7%AB%8B%E9%9F%B3%E6%A5%BD%E5%A0%82"
+                    target="_blank"
+                    rel="noopener"
+                    >Google マップで見る →</a
+                  >
+                </p>
                 <p class="price">全席指定 1,000円</p>
               </div>
               <a
@@ -1409,7 +1455,11 @@
             } else if (start.mode === "pinch" && pts.size >= 2) {
               const [a, b] = [...pts.values()];
               const m = mid(a, b);
-              const ns = clamp((start.scale * dist(a, b)) / start.dist, MIN, MAX);
+              const ns = clamp(
+                (start.scale * dist(a, b)) / start.dist,
+                MIN,
+                MAX,
+              );
               const fe = ns / start.scale;
               tx = m.x - fe * (start.mx - start.tx) + (m.x - start.mx);
               ty = m.y - fe * (start.my - start.ty) + (m.y - start.my);
