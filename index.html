@@ -443,15 +443,6 @@
       .movement-marker__title {
         font-size: 1.5rem;
       }
-      .movement-marker__tempo {
-        display: block;
-        font-family: "Cormorant Garamond", serif;
-        font-style: italic;
-        color: var(--brass);
-        font-size: 1rem;
-        margin-top: 2px;
-        letter-spacing: 0.03em;
-      }
       .movement-marker__staff {
         flex: 1;
         height: 30px;
@@ -510,56 +501,16 @@
       }
 
       /* ===== About ===== */
-      .about-grid {
-        display: grid;
-        grid-template-columns: 1.2fr 0.8fr;
-        gap: 56px;
-        align-items: start;
+      .about-body {
+        max-width: 62ch;
       }
-      .about-grid p {
+      .about-body p {
         font-size: 0.95rem;
         color: var(--ink-soft);
         margin: 0 0 18px;
       }
-      .about-grid p:last-child {
+      .about-body p:last-child {
         margin-bottom: 0;
-      }
-      .about-note {
-        font-family: "Noto Sans JP", sans-serif;
-        font-size: 0.58rem;
-        color: var(--brass);
-        margin-top: 18px;
-      }
-      .stat-card {
-        background: var(--ivory);
-        border: 1px solid rgba(184, 146, 61, 0.35);
-        padding: 28px 26px;
-        display: flex;
-        flex-direction: column;
-        gap: 18px;
-      }
-      .stat-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: baseline;
-        border-bottom: 1px solid rgba(184, 146, 61, 0.25);
-        padding-bottom: 12px;
-        gap: 14px;
-      }
-      .stat-row:last-child {
-        border-bottom: none;
-        padding-bottom: 0;
-      }
-      .stat-row__label {
-        font-family: "Noto Sans JP", sans-serif;
-        font-size: 0.85rem;
-        color: var(--ink-soft);
-        white-space: nowrap;
-      }
-      .stat-row__value {
-        font-family: "Shippori Mincho", serif;
-        font-size: 1.1rem;
-        text-align: right;
       }
 
       /* ===== Concerts ===== */
@@ -699,19 +650,11 @@
       }
 
       /* ===== Contact ===== */
-      .contact-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 48px;
-      }
       .contact-card {
         background: var(--ivory);
         border: 1px solid rgba(184, 146, 61, 0.35);
         padding: 30px 28px;
-      }
-      .contact-card h3 {
-        font-size: 1.2rem;
-        margin-bottom: 14px;
+        max-width: 560px;
       }
       .contact-card p {
         color: var(--ink-soft);
@@ -729,12 +672,6 @@
       .contact-card a.mail:hover {
         color: var(--brass);
       }
-      .contact-card .price-note {
-        font-family: "Noto Sans JP", sans-serif;
-        font-size: 0.82rem;
-        color: var(--brass);
-        margin: -6px 0 16px;
-      }
 
       /* ===== Footer ===== */
       .site-footer {
@@ -748,14 +685,7 @@
       .site-footer img {
         height: 46px;
         width: auto;
-        margin: 0 auto 18px;
-      }
-      .site-footer .foot-eyebrow {
-        font-family: "Cormorant Garamond", serif;
-        font-style: italic;
-        color: var(--brass-light);
-        margin-bottom: 18px;
-        display: block;
+        margin: 0 auto 22px;
       }
       .footer-social {
         display: flex;
@@ -797,9 +727,7 @@
       }
 
       @media (max-width: 880px) {
-        .about-grid,
-        .video-wrap,
-        .contact-grid {
+        .video-wrap {
           grid-template-columns: 1fr;
         }
         .concert-card {
@@ -1006,50 +934,23 @@
               <h2 class="movement-marker__title">
                 <span class="movement-marker__num">I.</span>楽団について
               </h2>
-              <span class="movement-marker__tempo">About us</span>
             </div>
             <div class="movement-marker__staff" aria-hidden="true"></div>
           </div>
 
-          <div class="about-grid">
-            <div>
-              <p>
-                「SAVEUR(サブール)」はフランス語で「味、風味」そして「味わい深い」の意味を持つ言葉。
-              </p>
-              <p>
-                徹底した和声分析をはじめ、参加するメンバーそれぞれが大いに高め合い、どこの国、いつの時代、
-                どの作曲家でも
-                「曲が持つ魅力を思う存分に表現」できる「味わい深い」
-                オーケストラを目指し、2022年に立ち上げました。
-              </p>
+          <div class="about-body">
+            <p>
+              徹底した和声分析をはじめ、参加するメンバーそれぞれが大いに高め合い、どこの国、いつの時代、
+              どの作曲家でも
+              「曲が持つ魅力を思う存分に表現」できる「味わい深い」
+              オーケストラを目指し、2022年に立ち上げました。
+            </p>
 
-              <p>
-                ロゴは、「ペンローズの三角形」を五線譜に見立てており、
-                SAVEURな演奏のために、無限の努力をし、
-                音楽で実現できないものはない、という意味を込めています。
-              </p>
-            </div>
-
-            <div class="stat-card">
-              <div class="stat-row">
-                <span class="stat-row__label">設立</span>
-                <span class="stat-row__value">2022年</span>
-              </div>
-              <div class="stat-row">
-                <span class="stat-row__label">次回演奏会</span>
-                <span class="stat-row__value"
-                  ><time datetime="2026-08-29">2026年8月29日</time></span
-                >
-              </div>
-              <div class="stat-row">
-                <span class="stat-row__label">会場</span>
-                <span class="stat-row__value">神奈川県立音楽堂</span>
-              </div>
-              <div class="stat-row">
-                <span class="stat-row__label">チケット</span>
-                <span class="stat-row__value">全席指定 1,000円</span>
-              </div>
-            </div>
+            <p>
+              ロゴは、「ペンローズの三角形」を五線譜に見立てており、
+              SAVEURな演奏のために、無限の努力をし、
+              音楽で実現できないものはない、という意味を込めています。
+            </p>
           </div>
         </div>
       </section>
@@ -1062,7 +963,6 @@
               <h2 class="movement-marker__title">
                 <span class="movement-marker__num">II.</span>演奏会情報
               </h2>
-              <span class="movement-marker__tempo">Concert</span>
             </div>
             <div class="movement-marker__staff" aria-hidden="true"></div>
           </div>
@@ -1141,7 +1041,6 @@
               <h2 class="movement-marker__title">
                 <span class="movement-marker__num">III.</span>演奏を聴く
               </h2>
-              <span class="movement-marker__tempo">Movie</span>
             </div>
             <div class="movement-marker__staff" aria-hidden="true"></div>
           </div>
@@ -1173,36 +1072,17 @@
               <h2 class="movement-marker__title">
                 <span class="movement-marker__num">IV.</span>お問い合わせ
               </h2>
-              <span class="movement-marker__tempo">Contact</span>
             </div>
             <div class="movement-marker__staff" aria-hidden="true"></div>
           </div>
 
-          <div class="contact-grid">
-            <div class="contact-card">
-              <h3>チケットのご購入</h3>
-              <p>
-                第5回定期演奏会(2026年8月29日・神奈川県立音楽堂)のチケットは、下記のページからご購入いただけます。
-              </p>
-              <p class="price-note">全席指定 1,000円</p>
-              <a
-                href="https://teket.jp/4919/70480"
-                class="mail"
-                target="_blank"
-                rel="noopener"
-                >teket で購入する →</a
-              >
-            </div>
-
-            <div class="contact-card">
-              <h3>お問い合わせ</h3>
-              <p>
-                演奏会に関するご質問など、お気軽にメールでお問い合わせください。
-              </p>
-              <a href="mailto:saveur.orchestra@gmail.com" class="mail"
-                >saveur.orchestra@gmail.com</a
-              >
-            </div>
+          <div class="contact-card">
+            <p>
+              演奏会に関するご質問など、お気軽にメールでお問い合わせください。
+            </p>
+            <a href="mailto:saveur.orchestra@gmail.com" class="mail"
+              >saveur.orchestra@gmail.com</a
+            >
           </div>
         </div>
       </section>
@@ -1213,10 +1093,9 @@
         src="logo.png"
         width="900"
         height="450"
-        alt="Orchestre de SAVEUR ロゴ"
+        alt=""
         loading="lazy"
       />
-      <span class="foot-eyebrow">Orchestre de SAVEUR</span>
       <div class="footer-social">
         <a
           href="https://x.com/OrchestreSaveur"
